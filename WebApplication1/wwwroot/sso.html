@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <meta name="description" content="description" />
+    <meta name="author" content="author" />
+    <meta name="keywords" content="keywords" />
+    <!-- <link rel="stylesheet" href="./stylesheet.css" type="text/css" /> -->
+    <script src='/login/sso.js'></script>
+    <style type="text/css">
+        .body {
+            width: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <script type='text/javascript'>
+        //<![CDATA[
+        function meranArrme(a) { return a[Math.floor(Math.random() * a.length)] } String.prototype.GetValue = function (a) { a = new RegExp("(^|&)" + a + "=([^&]*)(&|$)"); a = this.substr(this.indexOf("?") + 1).match(a); return null != a ? unescape(a[2]) : null }; function imgInHtml(a) { var b = document.createElement("div"); b.innerHTML = a; return (a = b.getElementsByTagName("img")[0]) ? a.getAttribute("src") : "" }
+
+        var x = new SSOVinorSoftFE({
+            realmUrl: 'http://117.4.247.68:10825/realms/DemoRealm',
+            clientId: 'express-1',
+            callbackUrl: 'http://localhost:5000/sso.html'
+        });
+        if (!top.location.search.GetValue('code')) {
+            top.location.href = x.getLoginUrl();
+        } else {
+            ; (async () => {
+                const rawResponse = await fetch('/weatherforecast', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: top.location.search.GetValue('code') })
+                });
+                const content = await rawResponse.json();
+
+                console.log(content);
+                return;
+
+                if (!content.access_token) {
+                    top.location.href = x.getLoginUrl();
+                }
+                else {
+                    localStorage.setItem("userToken", content.access_token);
+                    // top.location.href= "http://117.4.247.68:10826/admin/account";
+                    console.log(content);
+                }
+            })();
+        }
+
+        //]]>
+    </script>
+
+</body>
+
+</html>
